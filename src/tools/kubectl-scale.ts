@@ -84,23 +84,12 @@ export async function kubectlScale(
     }
   } catch (error: any) {
     if (error instanceof McpError) {
-      return {
-        content: [
-          {
-            type: "text",
-            text: `Error: ${error.message}`,
-          },
-        ],
-      };
+      throw error;
     }
 
-    return {
-      content: [
-        {
-          type: "text",
-          text: `Failed to scale resource: ${error.message}`,
-        },
-      ],
-    };
+    throw new McpError(
+      ErrorCode.InternalError,
+      `Failed to scale resource: ${error.message}`
+    );
   }
 }
